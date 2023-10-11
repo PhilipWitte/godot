@@ -407,7 +407,7 @@ void GodotGeneric6DOFJoint3D::solve(real_t p_timestep) {
 	Vector3 angular_axis;
 	real_t angularJacDiagABInv;
 	for (i = 0; i < 3; i++) {
-		if (m_angularLimits[i].m_enableLimit && m_angularLimits[i].needApplyTorques()) {
+		if ((m_angularLimits[i].m_enableLimit || m_angularLimits[i].m_enableMotor) && m_angularLimits[i].needApplyTorques()) {
 			// get axis
 			angular_axis = getAxis(i);
 
