@@ -635,6 +635,7 @@ public:
 			real_t angular_equilibrium_point = 0.0;
 			bool angular_motor_enabled = false;
 			real_t angular_motor_target_velocity = 0.0;
+			real_t angular_motor_force_limit = 300.0;
 		};
 
 		virtual JointType get_joint_type() { return JOINT_TYPE_6DOF; }

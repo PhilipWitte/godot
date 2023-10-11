@@ -2737,6 +2737,12 @@ bool PhysicalBone3D::SixDOFJointData::_set(const StringName &p_name, const Varia
 			PhysicsServer3D::get_singleton()->generic_6dof_joint_set_param(j, axis, PhysicsServer3D::G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY, axis_data[axis].angular_motor_target_velocity);
 		}
 
+	} else if ("angular_motor_force_limit" == var_name) {
+		axis_data[axis].angular_motor_force_limit = p_value;
+		if (is_valid_6dof) {
+			PhysicsServer3D::get_singleton()->generic_6dof_joint_set_param(j, axis, PhysicsServer3D::G6DOF_JOINT_ANGULAR_FORCE_LIMIT, axis_data[axis].angular_motor_force_limit);
+		}
+
 	} else {
 		return false;
 	}
@@ -2817,6 +2823,8 @@ bool PhysicalBone3D::SixDOFJointData::_get(const StringName &p_name, Variant &r_
 		r_ret = axis_data[axis].angular_motor_enabled;
 	} else if ("angular_motor_target_velocity" == var_name) {
 		r_ret = axis_data[axis].angular_motor_target_velocity;
+	} else if ("angular_motor_force_limit" == var_name) {
+		r_ret = axis_data[axis].angular_motor_force_limit;
 	} else {
 		return false;
 	}
@@ -2849,6 +2857,9 @@ void PhysicalBone3D::SixDOFJointData::_get_property_list(List<PropertyInfo> *p_l
 		p_list->push_back(PropertyInfo(Variant::FLOAT, prefix + PNAME("angular_spring_stiffness")));
 		p_list->push_back(PropertyInfo(Variant::FLOAT, prefix + PNAME("angular_spring_damping")));
 		p_list->push_back(PropertyInfo(Variant::FLOAT, prefix + PNAME("angular_equilibrium_point")));
+		p_list->push_back(PropertyInfo(Variant::BOOL, prefix + PNAME("angular_motor_enabled")));
+		p_list->push_back(PropertyInfo(Variant::FLOAT, prefix + PNAME("angular_motor_target_velocity")));
+		p_list->push_back(PropertyInfo(Variant::FLOAT, prefix + PNAME("angular_motor_force_limit")));
 	}
 }
 
@@ -3168,6 +3179,7 @@ void PhysicalBone3D::_reload_joint() {
 				PhysicsServer3D::get_singleton()->generic_6dof_joint_set_param(joint, static_cast<Vector3::Axis>(axis), PhysicsServer3D::G6DOF_JOINT_ANGULAR_SPRING_EQUILIBRIUM_POINT, g6dofjd->axis_data[axis].angular_equilibrium_point);
 				PhysicsServer3D::get_singleton()->generic_6dof_joint_set_flag(joint, static_cast<Vector3::Axis>(axis), PhysicsServer3D::G6DOF_JOINT_FLAG_ENABLE_MOTOR, g6dofjd->axis_data[axis].angular_motor_enabled);
 				PhysicsServer3D::get_singleton()->generic_6dof_joint_set_param(joint, static_cast<Vector3::Axis>(axis), PhysicsServer3D::G6DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY, g6dofjd->axis_data[axis].angular_motor_target_velocity);
+				PhysicsServer3D::get_singleton()->generic_6dof_joint_set_param(joint, static_cast<Vector3::Axis>(axis), PhysicsServer3D::G6DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT, g6dofjd->axis_data[axis].angular_motor_force_limit);
 			}
 
 		} break;
